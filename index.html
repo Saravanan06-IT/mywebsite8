@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EventTick - Professional Workspace Platform</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <aside class="sidebar">
+        <div class="logo"><i class="fa-solid fa-ticket"></i> EventTick</div>
+        <ul class="nav-menu">
+            <li class="nav-item"><a class="nav-link active" data-target="view-dashboard"><i class="fa-solid fa-border-all"></i> Dashboard</a></li>
+            <li class="nav-item"><a class="nav-link" data-target="view-events"><i class="fa-solid fa-calendar-days"></i> Events</a></li>
+            <li class="nav-item"><a class="nav-link" data-target="view-analytics"><i class="fa-solid fa-chart-line"></i> Analytics</a></li>
+            <li class="nav-item"><a class="nav-link" data-target="view-attendees"><i class="fa-solid fa-users"></i> Attendees</a></li>
+        </ul>
+        <div class="nav-menu" style="flex-grow: 0;">
+            <li class="nav-item"><a class="nav-link" data-target="view-settings"><i class="fa-solid fa-gear"></i> Settings</a></li>
+        </div>
+    </aside>
+
+    <main class="main-content">
+        <header class="header">
+            <div class="search-bar">
+                <i class="fa-solid fa-magnifying-glass" style="color: var(--text-gray)"></i>
+                <input type="text" id="searchInput" placeholder="Global system search..." onkeyup="handleGlobalSearch()">
+            </div>
+            <div class="action-tray">
+                <i class="fa-solid fa-moon theme-toggle" onclick="toggleSystemTheme()"></i>
+                <div class="profile-area" onclick="toggleAccountMenu(event)">
+                    <i class="fa-regular fa-bell" style="font-size: 1.2rem; color: var(--text-gray)"></i>
+                    <div class="profile-img">JD</div>
+                    <div>
+                        <div style="font-weight: 700; font-size: 0.95rem;">John Doe</div>
+                        <div style="font-size: 0.8rem; color: var(--text-gray)">Organizer Workspace</div>
+                    </div>
+                    <div class="account-dropdown" id="accountMenu">
+                        <div class="dropdown-item" onclick="navigateTo('view-dashboard')"><i class="fa-regular fa-user"></i> My Dashboard</div>
+                        <div class="dropdown-item" onclick="simulateLogout()" style="color: #d9534f;"><i class="fa-solid fa-arrow-right-from-bracket"></i> Clear Storage</div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <section id="view-dashboard" class="view-section active">
+            <div class="dashboard-header">
+                <div>
+                    <h1>Dashboard Workspace</h1>
+                    <p style="color: var(--text-gray); margin-top: 4px;">Unified pipeline diagnostic telemetry overview</p>
+                </div>
+                <button class="btn-primary" onclick="toggleModal(true)">+ Create Event</button>
+            </div>
+            <div class="stats-grid">
+                <div class="stat-card dark"><span class="stat-title">Gross Yield</span><span class="stat-value">$34,800</span></div>
+                <div class="stat-card"><span class="stat-title">Tickets Issued</span><span class="stat-value" id="dashTicketCount">0</span></div>
+                <div class="stat-card"><span class="stat-title">Active Deployments</span><span class="stat-value" id="dashEventCount">0</span></div>
+                <div class="stat-card"><span class="stat-title">Pending Tasks</span><span class="stat-value">1</span></div>
+            </div>
+            <div class="bottom-grid">
+                <div class="chart-card">
+                    <div class="card-header"><span>Conversion Pipeline Index</span></div>
+                    <canvas id="miniDashboardChart" height="120"></canvas>
+                </div>
+                <div class="list-card">
+                    <div class="card-header"><span>System Alerts</span></div>
+                    <div style="padding: 10px 0; border-bottom: 1px solid var(--border-color);"><strong>Database Node Synchronized</strong> <span style="float:right; font-size:0.8rem; color:var(--text-gray);">Just Now</span></div>
+                    <div style="padding: 10px 0;"><strong>Stripe Webhook Confirmed</strong> <span style="float:right; font-size:0.8rem; color:var(--text-gray);">14m ago</span></div>
+                </div>
+            </div>
+        </section>
+
+        <section id="view-events" class="view-section">
+            <div class="dashboard-header">
+                <div>
+                    <h1>Event Resource Registries</h1>
+                    <p style="color: var(--text-gray); margin-top: 4px;">Manage, deploy, and provision your running instances</p>
+                </div>
+                <button class="btn-primary" onclick="toggleModal(true)">+ Create Event</button>
+            </div>
+            <div class="events-display-grid" id="eventsContainerGrid"></div>
+        </section>
+
+        <section id="view-analytics" class="view-section">
+            <div class="dashboard-header">
+                <div>
+                    <h1>Metric Engines & Analytical Streams</h1>
+                    <p style="color: var(--text-gray); margin-top: 4px;">Structural multi-axis transactional conversion metrics</p>
+                </div>
+            </div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px;">
+                <div class="chart-card">
+                    <div class="card-header"><span>Category Market Allocation</span></div>
+                    <div style="max-width: 280px; margin: 0 auto;"><canvas id="analyticsCategoryChart"></canvas></div>
+                </div>
+                <div class="chart-card">
+                    <div class="card-header"><span>Structural Channel Pipeline</span></div>
+                    <canvas id="analyticsPipelineChart" height="180"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <section id="view-attendees" class="view-section">
+            <div class="dashboard-header">
+                <div>
+                    <h1>System Access Registry</h1>
+                    <p style="color: var(--text-gray); margin-top: 4px;">Dynamic verification credentials list</p>
+                </div>
+                <select class="filter-select" id="statusFilter" onchange="renderAttendeesTable()">
+                    <option value="ALL">Show All Status Keys</option>
+                    <option value="CONFIRMED">CONFIRMED</option>
+                    <option value="PENDING">PENDING</option>
+                </select>
+            </div>
+            <div class="list-card">
+                <div class="data-table-container">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Attendee Identity Label</th>
+                                <th>System Vector Assortment</th>
+                                <th>Status Key</th>
+                                <th>Operational Stamp</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="attendeeTableBody"></tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <div class="modal-overlay" id="eventModal">
+        <div class="modal-content">
+            <h3 style="margin-bottom: 20px;">Deploy New Event Instance</h3>
+            <div class="form-row">
+                <label>Event Name Vector</label>
+                <input type="text" id="inputEventTitle" placeholder="e.g., Summit Conference 2026">
+            </div>
+            <div class="form-row">
+                <label>Assortment Segment Classification</label>
+                <select id="inputEventCategory">
+                    <option value="Conference">Conference</option>
+                    <option value="Music/Concert">Music/Concert</option>
+                    <option value="Networking">Networking</option>
+                </select>
+            </div>
+            <div class="form-row">
+                <label>Total Capacity Limit</label>
+                <input type="number" id="inputEventCapacity" value="500">
+            </div>
+            <div style="display: flex; gap: 12px; justify-content: flex-end; margin-top: 20px;">
+                <button class="btn-secondary" onclick="toggleModal(false)">Abort Action</button>
+                <button class="btn-primary" onclick="executeEventCreation()">Provision Registry</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
